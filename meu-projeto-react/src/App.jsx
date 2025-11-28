@@ -6,7 +6,9 @@ import './App.css'
 function App() {
   return (
     <div>
-      <h1> luis henrique</h1>
+      <header> Hospital Centenario</header>
+      <main>lore</main>
+      <footer>@2025</footer>
     </div>
   )
 }
