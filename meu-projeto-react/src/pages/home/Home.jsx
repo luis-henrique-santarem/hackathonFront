@@ -114,12 +114,78 @@ const updateSetor = async ({ id_setor, data }) => {
     }
 }
 
-const atendimentoData = [
-    { setor: "Emergência", pacientes: 42 },
-    { setor: "UTI", pacientes: 18 },
-    { setor: "Internação", pacientes: 31 },
-    { setor: "Imagem", pacientes: 12 },
-];
+
+
+async function getDataForDashBoard() {
+    try {
+        const data = await getSetores();
+
+        return data.map((s) => ({
+            setor: `${s.tipo_setor}`,
+            leitos: Array.isArray(s.leitos) ? s.leitos.length : 0
+        }));
+    } catch (error) {
+        console.error("Erro ao buscar setores:", error);
+        return []; // Retorna array vazio em caso de erro
+    }
+}
+
+
+import { Bed, User, Hospital } from "lucide-react";
+
+export function LeitoCard({leitos}) {
+    return (
+        <div className="leito-grid">
+            {leitos.map((leito) => (
+                <div className="leito-card" style={{
+                    position: "relative"
+                }} key={leito.id_leito}>
+
+                    <div className="leito-card-header">
+                        <Bed size={22} strokeWidth={1.7} />
+                        <h3>Leito</h3>
+                    </div>
+
+                    <div style={{
+                        borderRadius: "100%",
+                        position: "absolute",
+                        right: 20,
+                        top: 20,
+                        width: "10px",
+                        height: "10px",
+                        backgroundColor: leito.usuario ? "red" : "green"
+                    }}></div>
+
+
+
+                    <div className="leito-info">
+                        <div className="leito-info-item">
+                            <Hospital size={18} />
+                            <span><strong>Setor:</strong> {leito.setor?.nome_setor}</span>
+                        </div>
+
+                        <div className="leito-info-item">
+                            <Hospital size={18} />
+                            <span><strong>Tipo:</strong> {leito.setor?.tipo_setor}</span>
+                        </div>
+
+                        <div className="leito-info-item">
+                            <User size={18} />
+                            <span>
+                                <strong>Ocupado por:</strong> {leito.usuario ? leito.usuario.nome : "Vazio"}
+                            </span>
+                        </div>
+                    </div>
+
+                    <button className="btn-manage">Gerenciar</button>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+
+
 
 export default function Home() {
     const [clientModalOpen, setClientModal] = useState(false)
@@ -136,7 +202,21 @@ export default function Home() {
     const [leitoUpdateModal, setLeitoUpdateModal] = useState(false)
     const [leitoSelected, setLeitoSelected] = useState(null)
     const [openModalUsers, setOpenModalUsers] = useState(false)
+    const [selectdUser, setSelectdUser] = useState(null)
+    const [openSetoresModal, setSetoresModal] = useState(false)
+    const [dashboardValues, setDashboardValues] = useState([])
 
+
+    useEffect(() => {
+        const get = async () => {
+            setDashboardValues(await getDataForDashBoard())
+        }
+
+        get()
+    }, [])
+
+
+    console.log(dashboardValues)
     useEffect(() => {
         const get = async () => {
             const users = await getUsers()
@@ -168,11 +248,43 @@ export default function Home() {
     return (
         <main className="main-content">
 
-            <ModalUsers users={users} open={openModalUsers} onClose={() => {
-                
-            }}/>
 
 
+            <ModalUsers
+                users={users}
+                open={openModalUsers}
+                onSelect={(user) => {
+                    setSelectdUser(user);      // salva usuário selecionado
+                    setOpenModalUsers(false);  // fecha modal de usuários
+                    setSetoresModal(true);     // abre modal de setores
+                }}
+                onClose={() => setOpenModalUsers(false)}
+            />
+
+            <ModalSetores
+                onSelect={(data) => {
+                    setSelectdUser(data.user)
+                    setSetor(data.setor)
+                    setSetoresModal(false)
+                    setLeitoCreateModal(true)
+                }}
+                open={openSetoresModal}
+                setores={setores}
+                onClose={() => setSetoresModal(false)}
+                user={selectdUser}
+            />
+
+            <ModalLeito
+                open={leitoCreateModal}
+                user={selectdUser}
+                setor={selectedSetor}
+                onClose={() => {
+                    setLeitoCreateModal(false)
+                }}
+                onSubmit={() => {
+
+                }}
+            />
             <ModalCliente open={clientModalOpen} onSubmit={async (data) => {
                 await createUser(data)
                 setUsers(prev => [...prev, data])
@@ -255,12 +367,15 @@ export default function Home() {
                 </div>
 
 
+
                 <div className="side_main">
                     <div className="side_content">
                         <div className="header_main">
                             <button onClick={() => { setClientModal(prev => !prev) }}>Registrar Paciente</button>
                             <button onClick={() => { setSetorModal(prev => !prev) }}>Registrar Setor</button>
-                            <button>Registrar Setor</button>
+                            <button onClick={() => {
+                                setOpenModalUsers(true)
+                            }}>Registrar Leito</button>
                         </div>
 
                         <div className="card_chart_towers">
@@ -273,11 +388,11 @@ export default function Home() {
 
                             {section === "dashboard" && (
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart data={atendimentoData}>
+                                    <BarChart data={dashboardValues}>
                                         <XAxis dataKey="setor" />
                                         <YAxis />
                                         <Tooltip />
-                                        <Bar dataKey="pacientes" fill="#4c88ff" radius={[8, 8, 0, 0]} />
+                                        <Bar dataKey="leitos" fill="#4c88ff" radius={[8, 8, 0, 0]} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             )}
@@ -324,6 +439,10 @@ export default function Home() {
                                 </div>
 
 
+                            )}
+
+                            {section === "leitos" && (
+                                <LeitoCard leitos={leitos}/>
                             )}
 
                             {/* Componente para lista de usuários */}
@@ -374,7 +493,7 @@ export default function Home() {
                         </div>
 
 
-                        <Mapa />
+                        
 
 
 
@@ -693,35 +812,56 @@ export function ModalUpdateSetor({ open, onClose, onSubmit, setor }) {
 }
 
 
-export function ModalUsers({ open, onClose, users }) {
+
+
+export function ModalSetores({ open, onClose, setores, onSelect, user }) {
     if (!open) return null;
+
+    const [filteredName, setFilteredName] = useState("");
+    const [setorSelected, setSetorSelected] = useState(null);
+
+
+    const filteredSetores = setores.filter((u) =>
+        u.nome_setor.toLowerCase().includes(filteredName.toLowerCase())
+    );
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal" style={{ width: "700px", margin: "0 auto" }} onClick={(e) => e.stopPropagation()}>
 
-                <h2>Lista de Usuários</h2>
+                <h2>Selecione um setor para: {user?.nome}</h2>
 
                 <div className="users_list" style={{ maxHeight: "400px", overflowY: "auto" }}>
+                    <div className="search-bar">
+                        <input
+                            type="text"
+                            placeholder="Pesquisar..."
+                            value={filteredName}
+                            onChange={(e) => setFilteredName(e.target.value)}
+                        />
+                        <button>🔍</button>
+                    </div>
+
                     <table className="users_table">
                         <thead>
                             <tr>
-                                <th>Nome</th>
-                                <th>CPF</th>
-                                <th>Telefone</th>
+                                <th>Nome Setor</th>
+                                <th>Tipo Setor</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
-
                         <tbody>
-                            {users.map((user) => (
-                                <tr key={user.id_usuario}>
-                                    <td>{user.nome}</td>
-                                    <td>{user.cpf}</td>
-                                    <td>{user.numero_telefone}</td>
+                            {filteredSetores.map((setor) => (
+                                <tr key={setor.id_setor}>
+                                    <td>{setor.nome_setor}</td>
+                                    <td>{setor.tipo_setor}</td>
                                     <td>
-                                        <button className="btn small">Editar</button>
-                                        <button className="btn small danger">Excluir</button>
+                                        <button className="btn small" onClick={() => onSelect({
+                                            setor,
+                                            user
+                                        })}>
+                                            Selecionar
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
@@ -738,6 +878,151 @@ export function ModalUsers({ open, onClose, users }) {
     );
 }
 
+
+export function ModalUsers({ open, onClose, users, onSelect }) {
+    if (!open) return null;
+    const [filteredName, setFilteredName] = useState("");
+    const [userSelectd, setUserSelect] = useState(null)
+
+    let filteredUsers = users.filter((u) =>
+        u.nome.toLowerCase().includes(filteredName.toLowerCase()))
+
+    filteredUsers = filteredName !== "" ? filteredUsers : users
+
+
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal" style={{ width: "700px", margin: "0 auto" }} onClick={(e) => e.stopPropagation()}>
+
+                <div className="users_list" style={{ maxHeight: "400px", overflowY: "auto" }}>
+                    <div className="search-bar">
+                        <input
+                            type="text"
+                            placeholder="Pesquisar..."
+                            onChange={(e) => setFilteredName(e.target.value)}
+                        />
+                        <button>
+                            🔍
+                        </button>
+                    </div>
+
+                    <table className="users_table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>Telefone</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {filteredUsers.map((user) => (
+                                <tr key={user.id_usuario}>
+                                    <td>{user.nome}</td>
+                                    <td>{user.cpf}</td>
+                                    <td>{user.numero_telefone}</td>
+                                    <td>
+                                        <button className="btn small" onClick={() => onSelect(user)}>Selecionar</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="modal-actions">
+                    <button className="btn cancel" onClick={onClose}>Fechar</button>
+
+
+                </div>
+
+            </div>
+        </div>
+    );
+}
+
+
+
+
+
+export function ModalLeito({ open, onClose, user, setor, onSubmit }) {
+    const [formData, setFormData] = useState({
+        id_setor: setor?.id_setor || "",
+        id_usuario: user?.id_usuario || "",
+    });
+
+    console.log(setor)
+
+    useEffect(() => {
+        if (setor || user) {
+            setFormData({
+                id_setor: setor?.id_setor || "",
+                id_usuario: user?.id_usuario || "",
+            });
+        }
+    }, [setor, user]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const created = await axios.post("http://localhost:3500/leito", { id_setor: formData.id_setor, id_usuario: formData.id_usuario })
+            toast.success(created.data.message)
+        } catch (e) {
+            toast.error(e.message)
+        }
+
+        onClose()
+        onSubmit(formData);
+    };
+
+    if (!open) return null;
+
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal" onClick={(e) => e.stopPropagation()} style={{ width: "500px" }}>
+                <h2>Cadastrar/Editar Leito</h2>
+
+                <form onSubmit={handleSubmit} className="modal-form">
+                    <div className="input-group">
+                        <label>Nome do Leito</label>
+                        <input
+                            type="text"
+                            name="nome_leito"
+                            value={formData.nome_leito}
+                            disabled
+                            required
+                        />
+                    </div>
+
+                    <div className="input-group">
+                        <label>Setor</label>
+                        <input type="text" value={setor?.nome_setor || ""} disabled />
+                    </div>
+
+                    <div className="input-group">
+                        <label>Usuário</label>
+                        <input type="text" value={user?.nome || ""} disabled />
+                    </div>
+
+                    <div className="modal-actions">
+                        <button type="button" className="btn cancel" onClick={onClose}>Cancelar</button>
+                        <button type="submit" className="btn confirm">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+}
 
 
 export function ModalLeitos({ open, onClose, onSubmit, users, setores }) {
