@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.main-content {
+    width: 100vw;
+    min-height: 100vh;
+    font-family: "Montserrat" , sans-serif;
+}
+
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    margin: 0 auto;
+    position: relative;
+}
+
+
+.side_menu {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+ 
+}
+
+.menu-header-image {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.menu-header-image h1 {
+    font-size: 20px;
+    text-align: center;
+}
+.menu-header-image h3 {
+    font-size: 10px;
+    color: #656565be;
+}
+
+.menu-header-image span {
+    font-size: 14px;
+    font-weight: bold;
+    color: rgba(174, 76, 174, 0.432);
+   
+    justify-content: center;
+}
+
+.separator {
+    width: 100%;
+    height: 0.1px;
+    background-color: #cccccc;
+}
+
+.menu_itens {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+.card_item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    width: 75%;
+
+    
+
+}
+
+.card_item, h1 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #656565;
+}
+
+.side_main {
+    width: 100%;
+    height: 100%;
+   
+}
+
+
+.side_content {
+    width: 98%;
+    overflow-y: auto;
+    max-height: 98%;
+    margin: 5px;
+    padding: 10px;
+    background-color: rgb(232, 232, 232);
+}
+
+.header_main {
+    margin-top: 20px;
+    margin-left: 30px;
+    display: flex; 
+    gap: 15px;
+}
+
+.header_main button {
+    padding: 12px 22px;
+    background: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #444;
+    cursor: pointer;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.1),
+    -4px -4px 10px rgba(255,255,255,0.8);
+    transition: 0.2s;
+}
+
+
+.header_main button:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 12px rgba(0,0,0,0.15),
+ -6px -6px 12px rgba(255,255,255,0.9);
+}
+
+
+.card_chart_towers {
+    width: 90%;
+    padding-top: 6%;
+    margin: 0 auto;
+    height: 400px;
+}
+
+
+.card_chart_section {
+    display: flex;
+    gap:5px;
+}
+/* Botões dentro do card - versão clean */
+.card_chart_section button {
+    background-color: #ffffff; /* fundo branco */
+    color: #1d4fa1; /* azul do dashboard */
+    border: 1px solid #d0d7e6; /* borda sutil */
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 30px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* leve sombra */
+}
+
+.card_chart_section button:hover {
+    background-color: #f4f8ff; /* leve tom azul ao passar o mouse */
+    transform: translateY(-2px);
+    border-color: #a5b8e0;
+}
+
+.card_chart_section button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    background-color: #e8f0ff; /* efeito de clique suave */
+}
+
+
+.users_list {
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    
+}
+
+.users_table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  
+  .users_table th, .users_table td {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 14px;
+    color: #1a3d7c;
+  }
+  
+  .users_table thead {
+    background-color: #f4f8ff;
+  }
+  
+  .users_table tbody tr:nth-child(even) {
+    background-color: #f9faff;
+  }
+  
+  .users_table tbody tr:hover {
+    background-color: #e8f0ff;
+  }
+  
+  .btn {
+    padding: 6px 12px;
+    margin-right: 6px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+  }
+  
+  .btn.edit {
+    background-color: #ffffff;
+    color: #1d4fa1;
+    border: 1px solid #d0d7e6;
+  }
+  
+  .btn.edit:hover {
+    background-color: #f4f8ff;
+  }
+  
+  .btn.delete {
+    background-color: #ff4c4c;
+    color: #ffffff;
+  }
+  
+  .btn.delete:hover {
+    background-color: #e04343;
+  }
+  
+  .p_id {
+    font-size: 14px;
+    color: #7d7d7d9d;
+  }
+
+  
+  .input-group select {
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #1a1a1a;
+      background-color: #fff;
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+  }
+  
+  .input-group select:focus {
+      outline: none;
+      border-color: #1d4fa1;
+      box-shadow: 0 0 0 2px rgba(29, 79, 161, 0.2);
+  }
+  
+  .input-group select option {
+      padding: 8px;
+  }
+
+
+  .list_users {
+    width: 100%;
+    height: 400px;
+  }
+
+  .users_table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.users_table th {
+    background: #f5f7ff;
+    padding: 10px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #e5e8f0;
+}
+
+.users_table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.users_table tr:hover {
+    background: #f0f4ff;
+}
+
+.btn.small {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: #e0e7ff;
+    color: #1a2b6d;
+    margin-right: 6px;
+}
+
+.btn.small.danger {
+    background: #ffdddd;
+    color: #b00000;
+}
