@@ -352,7 +352,7 @@ export default function Home() {
                     <div className="menu_itens">
                         <div className="card_item">
                             <LayoutDashboard />
-                            <h1>Home</h1>
+                            <h1>Dashboard</h1>
                         </div>
                         <div className="card_item">
                             <AppWindow />
