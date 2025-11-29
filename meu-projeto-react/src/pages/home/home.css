@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+.body {
+    background-color: rgb(232, 232, 232);
+}
 
 .main-content {
     width: 100vw;
@@ -21,6 +24,7 @@
     display: flex;
     flex-direction: column;
     padding: 20px 10px;
+    background-color: white;
  
 }
 
@@ -82,17 +86,18 @@
 
 .side_main {
     width: 100%;
-    
+    max-height: 130vh;
+    overflow-y: auto;
    
 }
 
 
 .side_content {
     width: 98%;
-    min-height: 100vh;
+    
     margin: 5px;
     padding: 10px;
-    background-color: rgb(232, 232, 232);
+    
     
 }
 

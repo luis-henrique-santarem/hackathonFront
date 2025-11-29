@@ -1,9 +1,9 @@
 import axios from "axios"
 import "./home.css"
-import Logo from "../../assets/logo4.png"
 import { AppWindow, HomeIcon, LayoutDashboard } from "lucide-react"
 import Mapa from "../map/map"
 import { useEffect, useState } from "react"
+import Logo from "../../assets/logo5.png"
 
 
 
@@ -175,6 +175,8 @@ export function LeitoCard({leitos}) {
                                 <strong>Ocupado por:</strong> {leito.usuario ? leito.usuario.nome : "Vazio"}
                             </span>
                         </div>
+
+                      
                     </div>
 
                     <button className="btn-manage">Gerenciar</button>
@@ -341,9 +343,7 @@ export default function Home() {
                 <div className="side_menu">
                     <div className="menu-header-image">
 
-                        <h3>Senac apresenta</h3>
-                        <h1>CENTENARIO</h1>
-                        <span>DASHBOARD</span>
+                        <img src={Logo} alt="" width={"100%"}/>
 
                     </div>
 
@@ -488,9 +488,11 @@ export default function Home() {
 
                             )}
 
-
+<Mapa/>
 
                         </div>
+
+                     
 
 
                         
